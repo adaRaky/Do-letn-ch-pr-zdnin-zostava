@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>Odpočítavanie do letných prázdnin</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-image: url('Slnko.PNG');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: #ffffff;
+      text-shadow: 1px 1px 3px #000;
+      text-align: center;
+      padding-top: 100px;
+    }
+    h1 {
+      font-size: 2.5em;
+    }
+    #countdown {
+      font-size: 2em;
+      margin-top: 20px;
+    }
+    #today {
+      font-size: 1.2em;
+      margin-bottom: 30px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Koľko dní zostáva do letných prázdnin?</h1>
+  <div id="today"></div>
+  <div id="countdown"></div>
+
+  <script>
+    const targetDate = new Date(new Date().getFullYear(), 6, 1); // 1. júl
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const months = ['január', 'február', 'marec', 'apríl', 'máj', 'jún', 'júl', 'august', 'september', 'október', 'november', 'december'];
+    const todayText = `Dnes je: ${today.getDate()}. ${months[today.getMonth()]} ${today.getFullYear()}`;
+    document.getElementById('today').textContent = todayText;
+
+    const holidays = [
+      '1.1', '6.1', '1.5', '8.5', '5.7', '29.8',
+      '1.9', '15.9', '1.11', '17.11', '24.12', '25.12', '26.12',
+      '17.4', '18.4', '19.4', '20.4', '21.4', '22.4',
+      '2.5', '9.5'
+    ];
+
+    function isWeekend(date) {
+      const day = date.getDay();
+      return day === 0 || day === 6;
+    }
+
+    function isHoliday(date) {
+      const d = date.getDate();
+      const m = date.getMonth() + 1;
+      const key = `${d}.${m}`;
+      return holidays.includes(key);
+    }
+
+    let currentDate = new Date(today);
+    let workingDays = 0;
+
+    while (currentDate < targetDate) {
+      if (!isWeekend(currentDate) && !isHoliday(currentDate)) {
+        workingDays++;
+      }
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    const countdownDiv = document.getElementById('countdown');
+
+    if (workingDays > 0) {
+      countdownDiv.textContent = `${workingDays} pracovných dní do letných prázdnin`;
+    } else {
+      countdownDiv.textContent = "Letné prázdniny sú tu!";
+    }
+  </script>
+</body>
+</html>
